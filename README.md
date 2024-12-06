@@ -246,9 +246,9 @@ The data was scaled using standard scaler and encoded using one hot encoder. Fur
 Model Name: SVC - Tuned for Recall \
 Params: {'classifier__C': 10, 'classifier__degree': 3, 'classifier__gamma': 'scale', 'classifier__kernel': 'poly'} \
 **Train Recall: 0.999970** \
-**Test Recall : 0.986779** \
+**Test Recall : 0.986779** 
 
-The model has excellent recall abilities as shown here
+The model has excellent recall abilities and excellent class separation abilities as shown here
 ![cm](images/cm_comparison_svc.png)
 
 Based on permutation importance as well as SVM coefficient analysis, the most imporatnt features and feature values are as follows:
