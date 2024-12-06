@@ -1,10 +1,10 @@
 # Will this order be delivered on time? 
-#### Jupyter Notebook with detailed analysis [here](update.this.com)
+#### Jupyter Notebook with detailed analysis [here](https://github.com/nikhilmadhu/otd/blob/main/src/Capstone_OTD.ipynb)
 
 ## Business Goal
 In today's interconnected, globalized economy with supply chains and shipping routes spanning across the globe, the ability to accurately deliver an order at the promised time is paramount to customer satisfaction. This is tracked by a metric called On Time Delivery (OTD). Ability to predict OTD misses and take appropriate corrective actions would be beneficial to brand image, customer satisfaction and in turn, higher customer retentions and more orders, which would increase sales and profits!
 
-For this specific analysis, We will be exploring how 'Days of Shipping(real)' and 'Days of Shipping(Scheduled)' are related and create a model to predict if the gap between the two would be zero or not? if zero, it is an on-time delivery.
+For this specific analysis, We will explore how 'Days of Shipping(real)' and 'Days of Shipping(Scheduled)' are related and create a model to predict if the Real shipment time will match the scheduled value or not.
 
 This could be approached in two  ways - 
 1. Treat Days of shipping(real) as a real value and apply regression techniques to predict the scheduled Days of shipping value to be as close to the real one as possible
@@ -16,16 +16,21 @@ In subsequent iterations, we could add additional analysis and models to predict
 
 ## Actionable Insights from the Analysis
 Based on analysis so far - 
-1. The scheduled number of days has the maximum impact on on-time delivery of an order (Indicates that if underlying rule engine for this predictio becoems better, otd will improve as expected)
-2. The day on which the order is palced and the shipment is made has maximm impact on-time delivery.
->> - When predicted days are <4, there is a very high chance of not meeting OTD. These needs to be reviewed and addressed first as these could also be orders where the customer has paid extra for quicker shipping
->> -  January and December seem to have more misses. This could be due to shipping crunch as a results of holidays. Time to ship and mode of shipment should be adjusted to alleiviate this
->> -  When shipped or ordered on the last day of the month, there is a larger chance of missed OTD
->> -  First and Second Class shipment modes are not working and well and results in large number of misses. Same Day is better, but still misses ~50% of times.
+#### Prioritize Orders with Predicted Shipping Times Under 4 Days
+Orders with predicted shipping times of less than 4 days have a significantly higher risk of missing the On-Time Delivery (OTD) target. These should be reviewed and addressed immediately. This is especially important because these orders may include customers who have paid extra for expedited shipping.
+#### Investigate Seasonal Trends
+January and December show a higher rate of OTD misses, likely due to increased shipping volumes and potential delays around the holidays. Consider adjusting shipping times and methods during these peak seasons to mitigate this issue.
+#### Address End-of-Month Shipping Challenges
+Orders shipped or placed on the last day of the month appear to be more susceptible to OTD misses.  Further investigation is needed to understand the factors contributing to this trend and implement appropriate solutions.
+#### Re-evaluate Shipping Modes
+First and Second Class shipping modes are underperforming and lead to a significant number of missed OTD targets. While Same Day shipping performs better, it still misses OTD almost 50% of the time. A thorough review of shipping mode options and their reliability is necessary to improve OTD performance.
 
 ## Data
-This data is courtsey of <> and I offer my sincere thanks to the team for making this data available in the public domain. It has ~180K samples with 50 features 
+This data is courtsey of Constante, Fabian; Silva, Fernando; Pereira, António (2019), “DataCo SMART SUPPLY CHAIN FOR BIG DATA ANALYSIS”, Mendeley Data, V5, doi: 10.17632/8gx2fvg2k6.5 and I offer my sincere thanks to the team for making this data available in the public domain. It has ~180K samples with 50 features 
 #### Contents: 
+<details>
+  <summary>Click to expand table with field descriptions</summary>
+   
 | FIELDS | DESCRIPTION |
 |---|---|
 | Type | Type of transaction made |
@@ -80,16 +85,68 @@ This data is courtsey of <> and I offer my sincere thanks to the team for making
 | Product Status | Status of the product stock: If it is 1 not available, 0 the product is available |
 | Shipping date (DateOrders) | Exact date and time of shipment |
 | Shipping Mode | The following shipping modes are presented: Standard Class, First Class, Second Class, Same Day |
+</details>
 
 The data was of good quality with very few missing records
-(Data details - initial table)
+<details>
+  <summary>Click to expand table with initial data quality</summary>
+   
+|Column Name|Type|Null Count|Unique Count|Null %|
+|---|---|---|---|---|
+|Type|object|0|4|0.00|
+|Days for shipping (real)|int64|0|7|0.00|
+|Days for shipment (scheduled)|int64|0|4|0.00|
+|Benefit per order|float64|0|21998|0.00|
+|Sales per customer|float64|0|2927|0.00|
+|Delivery Status|object|0|4|0.00|
+|Late delivery risk|int64|0|2|0.00|
+|Category Id|int64|0|51|0.00|
+|Customer City|object|0|563|0.00|
+|Customer Country|object|0|2|0.00|
+|Customer Id|int64|0|20652|0.00|
+|Customer Segment|object|0|3|0.00|
+|Customer State|object|0|46|0.00|
+|Customer Street|object|0|7458|0.00|
+|Customer Zipcode|float64|3|995|0.00|
+|Department Id|int64|0|11|0.00|
+|Latitude|float64|0|11250|0.00|
+|Longitude|float64|0|4487|0.00|
+|Market|object|0|5|0.00|
+|Order City|object|0|3597|0.00|
+|Order Country|object|0|164|0.00|
+|order date (DateOrders)|object|0|65752|0.00|
+|Order Item Cardprod Id|int64|0|118|0.00|
+|Order Item Discount|float64|0|1017|0.00|
+|Order Item Discount Rate|float64|0|18|0.00|
+|Order Item Product Price|float64|0|75|0.00|
+|Order Item Profit Ratio|float64|0|162|0.00|
+|Order Item Quantity|int64|0|5|0.00|
+|Sales|float64|0|193|0.00|
+|Order Item Total|float64|0|2927|0.00|
+|Order Profit Per Order|float64|0|21998|0.00|
+|Order Region|object|0|23|0.00|
+|Order State|object|0|1089|0.00|
+|Order Status|object|0|9|0.00|
+|Order Zipcode|float64|155679|609|86.24|
+|Product Card Id|int64|0|118|0.00|
+|Product Category Id|int64|0|51|0.00|
+|Product Price|float64|0|75|0.00|
+|Product Status|int64|0|1|0.00|
+|shipping date (DateOrders)|object|0|63701|0.00|
+|Shipping Mode|object|0|4|0.00|
+|gap|int64|0|7|0.00|
+|otd|int64|0|2|0.00|
 
-The data ha ~50/50 split for our purposes
-(Link to the OTD gaps graph)
+</details>
 
-The following adjustments were done to improve the quality:
+#### The data has ~60/40 split
+
+![otd_data](images/target_analysis.png)
+
+### Feature Engineering
+#### The following adjustments were done to improve data quality:
 1. Remove Features / Samples
->> - Order Id, Order Customer Id, Order Item Id : Key
+>> - Order Id, Order Customer Id, Order Item Id : Key columns that do not add any value to the analysis
 >> - Category Name : Co-rrelated to Category Id
 >> - Customer Email, Customer Fname, Customer Lname, Customer Password : Co-rrelated to Customer Id
 >> - Department Name : Co-rrelated to Department Id
@@ -97,17 +154,23 @@ The following adjustments were done to improve the quality:
 >> - Order Zip code has a large amount of null. This would be removed
 >> - There are three records with Customer zip as Null. Remove those rows as well
 2. Feature Engineering
->> - shipping date (DateOrders), order date (DateOrders). We will split this to epoch, day of week, week of year, month and year
+>> - shipping date (DateOrders), order date (DateOrders). Split into epoch, day of week, week of year, month and year
 
-With the base adjustment, the features looked as follows:
-> ### Categorical Features
- (Categorical columns details)
-> ### Numerical Features
-(numerical Features spread)
-> ### Correlation between Features  
-(Correlation matrix - initial)
+#### With the base adjustment, the features were organized as follows:
+<details>
+  <summary>Categorical Features</summary>
+   <img src="https://github.com/nikhilmadhu/otd/blob/main/images/categorical_analysis_count_plots.png" >
+</details>
+<details>
+  <summary>Numerical Features</summary>
+   <img src = "https://github.com/nikhilmadhu/otd/blob/main/images/numerical_analysis_histograms.png" >
+</details> 
+<details>
+  <summary>Correlation between Features</summary>
+   <img src = "https://github.com/nikhilmadhu/otd/blob/main/images/corr_matrix.png" >
+</details> 
 
-After evaluating these, the following actions were taken  
+#### After evaluating these, the following actions were taken  
 >> - 'product status' feature was always 0. Remove it
 >> - Order Dates and Shipping dates have very high correlation. Further, the month and weeks have high correlation as well. Hence, dropping those. Further, Order with 'Shipping Cancelled' status should be removed to not skew the shipping results
 >> - 'Category Id', 'Department Id', 'Product Category Id', 'Product Card Id' and 'Order Item Cardprod Id' have high positive correlation. To reduce computation, will only keep the 'Department Id' and drop the others
@@ -119,8 +182,49 @@ After evaluating these, the following actions were taken
 >> - 'Late Delivery Risk' and 'Gap' have high correlation, and it looks like it is captured based on actual shipping data. Hence, removing it
 >> - 'Customer Zip Code' and 'longitude/latitude' have a very high correlation. Removing the former
 
-After these adjustements, a good set of independent features were identified
-(Correlation matrix - final)
+
+#### and after these adjustements, the final set of fairly independent features were arrived at
+![corr_matrix_final](images/corr_matrix_final.png)
+
+#### Final dataset
+
+<details>
+  <summary>Click to expand table</summary>  
+   
+|Column Name|Type|Null Count|Unique Count|Null %|
+|---|---|---|---|---|
+|Type|object|0|4|0.0|
+|Days for shipping (real)|int64|0|7|0.0|
+|Days for shipment (scheduled)|int64|0|4|0.0|
+|Benefit per order|int32|0|1273|0.0|
+|Customer City|object|0|562|0.0|
+|Customer Country|object|0|2|0.0|
+|Customer Id|int64|0|20258|0.0|
+|Customer Segment|object|0|3|0.0|
+|Customer State|object|0|44|0.0|
+|Department Id|int64|0|11|0.0|
+|Latitude|int32|0|28|0.0|
+|Longitude|int32|0|64|0.0|
+|Market|object|0|5|0.0|
+|Order City|object|0|3585|0.0|
+|Order Country|object|0|164|0.0|
+|Order Item Discount Rate|float64|0|18|0.0|
+|Order Item Quantity|int64|0|5|0.0|
+|Sales|int32|0|126|0.0|
+|Order Region|object|0|23|0.0|
+|Order State|object|0|1083|0.0|
+|Order Status|object|0|7|0.0|
+|Shipping Mode|object|0|4|0.0|
+|gap|int64|0|7|0.0|
+|otd|int64|0|2|0.0|
+|shipping_dayofweek|int32|0|7|0.0|
+|shipping_dayofmonth|int32|0|31|0.0|
+|order_dayofweek|int32|0|7|0.0|
+|order_month|int32|0|12|0.0|
+|order_year|int32|0|4|0.0|
+|order_dayofmonth|int32|0|31|0.0|
+
+</details>
 
 ## Modeling
 As the dataset is fairly large, we will run the intial modeling against 50% of the dataset (for computational efficiencies) and then do the final set of training and optimization with the full dataset
@@ -135,19 +239,24 @@ GridSearchCV was used to evaluate the performance of various combinations of AUC
    
 The data was scaled using standard scaler and encoded using one hot encoder. Further, care was taken to ensure the slight imbalance of data was properly managed by the models by setting the appropriate hyperparameters.
 
-Initial analysis
-(Model performance table)
+### Analysis
+![model_details](images/model_details.png)
 
 ### Best Model Chosen
->> Model Name: SVC - Tuned for Recall
->> Params: {'classifier__C': 10, 'classifier__degree': 3, 'classifier__gamma': 'scale', 'classifier__kernel': 'poly'}
-**>> Train Recall: 0.999970**
->> Train AUC-ROC: 0.999971
->> Train Precision: 0.999970
-**>> Test Recall : 0.986779**
->> Test AUC-ROC: 0.983971
->> Test Precision: 0.986779
+Model Name: SVC - Tuned for Recall \
+Params: {'classifier__C': 10, 'classifier__degree': 3, 'classifier__gamma': 'scale', 'classifier__kernel': 'poly'} \
+**Train Recall: 0.999970** \
+**Test Recall : 0.986779** \
 
+The model has excellent recall abilities as shown here
+![cm](images/cm_comparison_svc.png)
+
+Based on permutation importance as well as SVM coefficient analysis, the most imporatnt features and feature values are as follows:
+1. Important Features
+![cm](images/PIM_SVM.png)
+
+2. Impact of Features / Categorical Values
+![cm](images/individual_feature_values.png)
 
 ## Next Steps
 1. Analyse this data using and Ensemble model
