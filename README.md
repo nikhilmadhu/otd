@@ -245,11 +245,17 @@ As the dataset is fairly large, we will run the intial modeling against 50% of t
 
 As the final goal is to ensure that the model is able to predict OTD-NotMet cases effectively, we will focus on Recall of the model
 
-GridSearchCV was used to evaluate the performance of various combinations of AUC/ROC metric to identify a good model from
+GridSearchCV was used to evaluate the performance of various combinations of AUC/ROC metric to identify a good model from the following base models -
 1. KNeighborsClassifier
 2. DecisionTreeClassifier
 3. LogisticRegression
 4. SVC (Support Vector Machine based classifier)
+   
+and, the following Enseble models -
+1. RandomForestClassifier
+2. GradientBoostingClassifier
+3. AdaBoostClassifier
+4. XGBClassifier (from XGBoost)
    
 The data was scaled using standard scaler and encoded using one hot encoder. Further, care was taken to ensure the slight imbalance of data was properly managed by the models by setting the appropriate hyperparameters.
 
@@ -257,9 +263,9 @@ The data was scaled using standard scaler and encoded using one hot encoder. Fur
 ![model_details](images/model_details_ens.png)
 
 <details>
-  <summary>Without Ensemble techniques</summary> 
+  <summary>Analysis of Base Models</summary> 
    
-### Best Model without Ensemble techniques
+#### Best Base Model
 Model Name: SVC - Tuned for Recall \
 Params: {'classifier__C': 10, 'classifier__degree': 3, 'classifier__gamma': 'scale', 'classifier__kernel': 'poly'} \
 **Train Recall: 0.999970** \
@@ -286,7 +292,7 @@ Params: {'classifier__learning_rate': 0.2, 'classifier__max_depth': 5, 'classifi
 The model has excellent recall abilities and excellent class separation abilities as shown here, along with much better fit and acore times as compared to the best SVC based model
 ![cm](images/cm_comparison_ens_Best.png)
 
-Based on permutation importance as well as SVM coefficient analysis, the most imporatnt features and feature values are as follows:
+Based on permutation importance as well as XGBoost's coefficient analysis, the most imporatnt features and impactful feature values are as follows:
 1. Important Features
 ![cm](images/PIM_ens.png)
 
