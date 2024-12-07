@@ -7,29 +7,43 @@ In today's interconnected, globalized economy with supply chains and shipping ro
 For this specific analysis, We will explore how 'Days of Shipping(real)' and 'Days of Shipping(Scheduled)' are related and create a model to predict if the Real shipment time will match the scheduled value or not.
 
 This could be approached in two  ways - 
-1. Treat Days of shipping(real) as a real value and apply regression techniques to predict the scheduled Days of shipping value to be as close to the real one as possible
-2. Consider the difference between the the Real and Scheduled Days of shipping and treat this a a bianry problem and predict Yes/No for met/not-not met sceanrios and approach this as a Classification problem
+1. Consider 'Days of shipping(real)' as a real value and apply regression techniques to predict the scheduled Days of shipping value to be as close to the real one as possible
+2. Consider the difference between the the Real and Scheduled Days of shipping and model this a a bianry problem to predict Yes/No for met/not-not met sceanrios, making this a Classification problem
    
 For the purposes of this analysis, we will take the second path and model this as a yes/no question that would provide insights to the operations /logistcs team if there is a lurking danger of missing OTD on a particualr order (Even before the shipping process has started) and enable them to take corrective actions. We will only consider Late deliveries as 'missed' and treat early deliveries as 'met'. 
 
 In subsequent iterations, we could add additional analysis and models to predict 'Early' scenarios as well as come up with a prediction model to predict expected shipping times for orders.
 
 ## Actionable Insights from the Analysis
-Based on analysis so far - 
-#### Prioritize Orders with Predicted Shipping Times Under 4 Days
-Orders with predicted shipping times of less than 4 days have a significantly higher risk of missing the On-Time Delivery (OTD) target. These should be reviewed and addressed immediately. This is especially important because these orders may include customers who have paid extra for expedited shipping.
 #### Investigate Seasonal Trends
 January and December show a higher rate of OTD misses, likely due to increased shipping volumes and potential delays around the holidays. Consider adjusting shipping times and methods during these peak seasons to mitigate this issue.
 #### Address End-of-Month Shipping Challenges
 Orders shipped or placed on the last day of the month appear to be more susceptible to OTD misses.  Further investigation is needed to understand the factors contributing to this trend and implement appropriate solutions.
 #### Re-evaluate Shipping Modes
+<details>
+  <summary>Shipping operations</summary>
+   <img src="https://github.com/nikhilmadhu/otd/blob/main/images/impact_of_shipping_op_on_ensemble.png'" >
+</details>
+
 First and Second Class shipping modes are underperforming and lead to a significant number of missed OTD targets. While Same Day shipping performs better, it still misses OTD almost 50% of the time. A thorough review of shipping mode options and their reliability is necessary to improve OTD performance.
 
+#### Re-evaluate Shipping time estimation rules, carrier performance and any other logistical challenges for
+<details>
+  <summary>Impact of location</summary>
+   <img src="https://github.com/nikhilmadhu/otd/blob/main/images/impact_of_loaction_on_ensemble.png.png'" >
+</details>
+
+##### Customer City
+- Orders to Customer cities 'Fairfield', 'Algonquin', 'Stockton' are often delayed
+##### Order Location 
+- On-Time Delivery (OTD) targets are consistently missed for orders placed in these cities: 'Villeurbanne', 'San Francisco de Macorís', 'Pirapora' and 'Apopa'
+- Additionally, orders shipped to the state of Tamaulipas show a higher likelihood of OTD misses.
+
 ## Data
-This data is courtsey of Constante, Fabian; Silva, Fernando; Pereira, António (2019), “DataCo SMART SUPPLY CHAIN FOR BIG DATA ANALYSIS”, Mendeley Data, V5, doi: 10.17632/8gx2fvg2k6.5 and I offer my sincere thanks to the team for making this data available in the public domain. It has ~180K samples with 50 features 
+This data is courtsey of Constante, Fabian; Silva, Fernando; Pereira, António (2019), “DataCo SMART SUPPLY CHAIN FOR BIG DATA ANALYSIS”, Mendeley Data, V5, doi: 10.17632/8gx2fvg2k6.5 available [here](https://data.mendeley.com/datasets/8gx2fvg2k6/3) and I offer my sincere gratitude to the team for making this data available in the public domain. It has ~180K samples with 50 features 
 #### Contents: 
 <details>
-  <summary>Click to expand table with field descriptions</summary>
+  <summary>Fields & descriptions</summary>
    
 | FIELDS | DESCRIPTION |
 |---|---|
@@ -89,7 +103,7 @@ This data is courtsey of Constante, Fabian; Silva, Fernando; Pereira, António (
 
 The data was of good quality with very few missing records
 <details>
-  <summary>Click to expand table with initial data quality</summary>
+  <summary>Initial Quality of Data</summary>
    
 |Column Name|Type|Null Count|Unique Count|Null %|
 |---|---|---|---|---|
@@ -189,7 +203,7 @@ The data was of good quality with very few missing records
 #### Final dataset
 
 <details>
-  <summary>Click to expand table</summary>  
+  <summary>Final Data & Quality</summary>  
    
 |Column Name|Type|Null Count|Unique Count|Null %|
 |---|---|---|---|---|
@@ -240,9 +254,12 @@ GridSearchCV was used to evaluate the performance of various combinations of AUC
 The data was scaled using standard scaler and encoded using one hot encoder. Further, care was taken to ensure the slight imbalance of data was properly managed by the models by setting the appropriate hyperparameters.
 
 ### Analysis
-![model_details](images/model_details.png)
+![model_details](images/model_details_ens.png)
 
-### Best Model Chosen
+<details>
+  <summary>Without Ensemble techniques</summary> 
+   
+### Best Model without Ensemble techniques
 Model Name: SVC - Tuned for Recall \
 Params: {'classifier__C': 10, 'classifier__degree': 3, 'classifier__gamma': 'scale', 'classifier__kernel': 'poly'} \
 **Train Recall: 0.999970** \
@@ -258,8 +275,28 @@ Based on permutation importance as well as SVM coefficient analysis, the most im
 2. Impact of Features / Categorical Values
 ![cm](images/individual_feature_values.png)
 
-## Next Steps
-1. Analyse this data using and Ensemble model
-2. Productionize the model
+</details>
+   
+### Best Model with Ensemble techniques
+Model Name: XG Boost - Lower Complexity \
+Params: {'classifier__learning_rate': 0.2, 'classifier__max_depth': 5, 'classifier__n_estimators': 200} \
+**Train Recall: 0.999365** \
+**Test Recall : 0.999119** 
+
+The model has excellent recall abilities and excellent class separation abilities as shown here, along with much better fit and acore times as compared to the best SVC based model
+![cm](images/cm_comparison_ens_Best.png.png)
+
+Based on permutation importance as well as SVM coefficient analysis, the most imporatnt features and feature values are as follows:
+1. Important Features
+![cm](images/PIM_ens.png)
+
+2. Impact of Features / Categorical Values
+![cm](images/individual_feature_values_ensemble.pngs.png)
+
+### Deployment
+The best model can be extracted for deployment using the joblib libraries and converted to an API using FastAPI (details provides in the workbook)
+
+### Next Steps
+Continue to fine tune the model and approach it from the perspective of Regression to predict scheduled shipping times that would reduce OTD misses
 
 
