@@ -274,7 +274,7 @@ Params: {'classifier__C': 10, 'classifier__degree': 3, 'classifier__gamma': 'sca
 The model has excellent recall abilities and excellent class separation abilities as shown here
 ![cm](images/cm_comparison_svc.png)
 
-Based on permutation importance as well as SVM coefficient analysis, the most imporatnt features and feature values are as follows:
+Based on permutation importance as well as SVM coefficient analysis, the most important and impactful feature values are as follows:
 1. Important Features
 ![cm](images/PIM_SVM.png)
 
@@ -292,7 +292,7 @@ Params: {'classifier__learning_rate': 0.2, 'classifier__max_depth': 5, 'classifi
 The model has excellent recall abilities and excellent class separation abilities as shown here, along with much better fit and acore times as compared to the best SVC based model
 ![cm](images/cm_comparison_ens_Best.png)
 
-Based on permutation importance as well as XGBoost's coefficient analysis, the most imporatnt features and impactful feature values are as follows:
+Based on permutation importance as well as XGBoost's coefficient analysis, the most important and impactful feature values are as follows:
 1. Important Features
 ![cm](images/PIM_ens.png)
 
@@ -300,7 +300,7 @@ Based on permutation importance as well as XGBoost's coefficient analysis, the m
 ![cm](images/individual_feature_values_ensemble.png)
 
 ### Deployment
-The best model can be extracted for deployment using the joblib libraries and converted to an API using FastAPI (details provides in the workbook)
+The best model is extracted for deployment using the joblib libraries and converted to an API using FastAPI (details provides in the workbook)
 
 ### Next Steps
 Continue to fine tune the model and approach it from the perspective of Regression to predict scheduled shipping times that would reduce OTD misses
