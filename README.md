@@ -21,8 +21,8 @@ January and December show a higher rate of OTD misses, likely due to increased s
 Orders shipped or placed on the last day of the month appear to be more susceptible to OTD misses.  Further investigation is needed to understand the factors contributing to this trend and implement appropriate solutions.
 #### Re-evaluate Shipping Modes
 <details>
-  <summary>Shipping operations</summary>
-   <img src="https://github.com/nikhilmadhu/otd/blob/main/images/impact_of_shipping_op_on_ensemble.png'" >
+  <summary>Impact of Shipping operations</summary>
+   <img src="https://github.com/nikhilmadhu/otd/blob/main/images/impact_of_shipping_op_on_ensemble.png" >
 </details>
 
 First and Second Class shipping modes are underperforming and lead to a significant number of missed OTD targets. While Same Day shipping performs better, it still misses OTD almost 50% of the time. A thorough review of shipping mode options and their reliability is necessary to improve OTD performance.
@@ -30,7 +30,7 @@ First and Second Class shipping modes are underperforming and lead to a signific
 #### Re-evaluate Shipping time estimation rules, carrier performance and any other logistical challenges for
 <details>
   <summary>Impact of location</summary>
-   <img src="https://github.com/nikhilmadhu/otd/blob/main/images/impact_of_loaction_on_ensemble.png.png'" >
+   <img src="https://github.com/nikhilmadhu/otd/blob/main/images/impact_of_loaction_on_ensemble.png" >
 </details>
 
 ##### Customer City
@@ -284,14 +284,14 @@ Params: {'classifier__learning_rate': 0.2, 'classifier__max_depth': 5, 'classifi
 **Test Recall : 0.999119** 
 
 The model has excellent recall abilities and excellent class separation abilities as shown here, along with much better fit and acore times as compared to the best SVC based model
-![cm](images/cm_comparison_ens_Best.png.png)
+![cm](images/cm_comparison_ens_Best.png)
 
 Based on permutation importance as well as SVM coefficient analysis, the most imporatnt features and feature values are as follows:
 1. Important Features
 ![cm](images/PIM_ens.png)
 
 2. Impact of Features / Categorical Values
-![cm](images/individual_feature_values_ensemble.pngs.png)
+![cm](images/individual_feature_values_ensemble.png)
 
 ### Deployment
 The best model can be extracted for deployment using the joblib libraries and converted to an API using FastAPI (details provides in the workbook)
