@@ -155,7 +155,8 @@ The data was of good quality with very few missing records
 
 #### The data has ~60/40 split
 
-![otd_data](images/target_analysis.png)
+![otd_Data](images/target_analysis.png)
+
 
 ### Feature Engineering
 #### The following adjustments were done to improve data quality:
@@ -198,10 +199,6 @@ The data was of good quality with very few missing records
 
 
 #### and after these adjustements, the final set of features were arrived at
-![corr_matrix_final](images/corr_matrix_final.png)
-
-#### Final dataset
-
 <details>
   <summary>Final Data & Quality</summary>  
    
@@ -240,6 +237,14 @@ The data was of good quality with very few missing records
 
 </details>
 
+The relationship between various features were as follows:
+<details>
+  <summary>Final Correlation matrix </summary>  
+   
+![corr_matrix_final](images/corr_matrix_final.png)
+
+</details>
+
 ## Modeling
 As the dataset is fairly large, we will run the intial modeling against 50% of the dataset (for computational efficiencies) and then do the final set of training and optimization with the full dataset
 
@@ -260,7 +265,7 @@ and, then, the  following Enseble models -
 The data was scaled using standard scaler and encoded using one hot encoder. Further, care was taken to ensure the slight imbalance of data was properly managed by the models by setting the appropriate hyperparameters.
 
 ### Analysis
-![model_details](images/cmodel_evaluation_final.png)
+![model_eval](images/model_evaluation_final.png)
 ![model_details](images/model_details_ens.png)
 
 <details>
