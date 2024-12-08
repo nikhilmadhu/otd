@@ -10,7 +10,7 @@ This could be approached in two  ways -
 1. Consider 'Days of shipping(real)' as a real value and apply regression techniques to predict the scheduled Days of shipping value to be as close to the real one as possible
 2. Consider the difference between the the Real and Scheduled Days of shipping and model this a a bianry problem to predict Yes/No for met/not-not met sceanrios, making this a Classification problem
    
-For the purposes of this analysis, we will take the second path and model this as a yes/no question that would provide insights to the operations /logistcs team if there is a lurking danger of missing OTD on a particualr order (Even before the shipping process has started) and enable them to take corrective actions. We will only consider Late deliveries as 'missed' and treat early deliveries as 'met'. 
+For the purposes of this analysis, we will take the second path and model this as a yes/no question that would provide insights to the operations/logistcs team if there is a lurking danger of missing OTD on a particualr order (Even before the shipping process has started) and enable them to take corrective actions. We will only consider Late deliveries as 'missed' and treat early deliveries as 'met'. 
 
 In subsequent iterations, we could add additional analysis and models to predict 'Early' scenarios as well as come up with a prediction model to predict expected shipping times for orders.
 
@@ -197,7 +197,7 @@ The data was of good quality with very few missing records
 >> - 'Customer Zip Code' and 'longitude/latitude' have a very high correlation. Removing the former
 
 
-#### and after these adjustements, the final set of fairly independent features were arrived at
+#### and after these adjustements, the final set of features were arrived at
 ![corr_matrix_final](images/corr_matrix_final.png)
 
 #### Final dataset
@@ -243,15 +243,15 @@ The data was of good quality with very few missing records
 ## Modeling
 As the dataset is fairly large, we will run the intial modeling against 50% of the dataset (for computational efficiencies) and then do the final set of training and optimization with the full dataset
 
-As the final goal is to ensure that the model is able to predict OTD-NotMet cases effectively, we will focus on Recall of the model
+As the final goal is to ensure that the model is able to predict OTD-NotMet cases effectively, we will focus on **Recall** of the model as we need negative cases to be identified efficiently.
 
-GridSearchCV was used to evaluate the performance of various combinations of AUC/ROC metric to identify a good model from the following base models -
+GridSearchCV was used to evaluate the performance of various combinations of **Recall** followed by AUC/ROC metric to identify a good model from the following base models -
 1. KNeighborsClassifier
 2. DecisionTreeClassifier
 3. LogisticRegression
 4. SVC (Support Vector Machine based classifier)
    
-and, the following Enseble models -
+and, then, the  following Enseble models -
 1. RandomForestClassifier
 2. GradientBoostingClassifier
 3. AdaBoostClassifier
@@ -260,6 +260,7 @@ and, the following Enseble models -
 The data was scaled using standard scaler and encoded using one hot encoder. Further, care was taken to ensure the slight imbalance of data was properly managed by the models by setting the appropriate hyperparameters.
 
 ### Analysis
+![model_details](images/cmodel_evaluation_final.png)
 ![model_details](images/model_details_ens.png)
 
 <details>
@@ -300,9 +301,13 @@ Based on permutation importance as well as XGBoost's coefficient analysis, the m
 ![cm](images/individual_feature_values_ensemble.png)
 
 ### Deployment
-The best model is extracted for deployment using the joblib libraries and converted to an API using FastAPI (details provides in the workbook)
+The top-performing model is selected for deployment. It's packaged using joblib and exposed as an API using the FastAPI framework (see the workbook for implementation details). To streamline the deployment process, MLflow is recommended for building a robust pipeline.
 
 ### Next Steps
-Continue to fine tune the model and approach it from the perspective of Regression to predict scheduled shipping times that would reduce OTD misses
+#### Ongoing Monitoring and Refinement
+As new data becomes available, it's crucial to continuously fine-tune the model to maintain its accuracy and ensure it remains free from bias. Regular evaluations and adjustments should be incorporated into the model's lifecycle.
+
+#### Future Enhancement: Predictive Shipping Time
+To further reduce On-Time Delivery (OTD) misses, consider developing a regression model that predicts optimal scheduled shipping times. This proactive approach could provide more accurate delivery estimates and help prevent delays before they occur.
 
 
