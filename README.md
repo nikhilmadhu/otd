@@ -274,8 +274,8 @@ The data was scaled using standard scaler and encoded using one hot encoder. Fur
 #### Best Base Model
 Model Name: SVC - Tuned for Recall \
 Params: {'classifier__C': 10, 'classifier__degree': 3, 'classifier__gamma': 'scale', 'classifier__kernel': 'poly'} \
-**Train Recall: 0.999970** \
-**Test Recall : 0.986779** 
+**Train Recall: 0.999879** \
+**Test Recall : 0.988715** 
 
 The model has excellent recall abilities and excellent class separation abilities as shown here
 ![cm](images/cm_comparison_svc.png)
@@ -292,8 +292,8 @@ Based on permutation importance as well as SVM coefficient analysis, the most im
 ### Best Model with Ensemble techniques
 Model Name: XG Boost - Lower Complexity \
 Params: {'classifier__learning_rate': 0.2, 'classifier__max_depth': 5, 'classifier__n_estimators': 200} \
-**Train Recall: 0.999365** \
-**Test Recall : 0.999119** 
+**Train Recall: 0.999661** \
+**Test Recall : 0.999255** 
 
 The model has excellent recall abilities and excellent class separation abilities as shown here, along with much better fit and acore times as compared to the best SVC based model
 ![cm](images/cm_comparison_ens_Best.png)
